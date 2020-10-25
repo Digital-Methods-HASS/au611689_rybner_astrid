@@ -1,0 +1,72 @@
+---
+title: "Assignment W6"
+author: "Astrid Rybner"
+date: "22/10/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+Define a defensive function that calculates the Gross Domestic Product of a nation from the data available in the gapminder dataset. 
+
+```{r}
+library(gapminder)
+
+df <- as.data.frame(gapminder)
+
+
+gdp_function <- function(data, year=NULL, country=NULL) {
+  if(!is.null(year)) { #if the year argument is not empty, subset data from that year 
+    data <- data[data$year %in% year, ]
+  }
+  if (!is.null(country)) { #if the country argument is not empty, subset data from that country 
+    data <- data[data$country %in% country,]
+  }
+  gdp <- data$pop * data$gdpPercap #calculate gdp
+  
+  new <- cbind(data, gdp=gdp) #add calculated gdp in new collumn to the df
+  return(new)
+}
+
+
+
+```
+
+Using that function, calculate the GDP of Denmark in the following years: 1967, 1977, 1987, 1997, 2007, and 2017.
+```{r}
+
+dk_gdp <- gdp_function(df, country="Denmark", year=c(1967, 1977, 1987, 1997, 2007, 2017))
+
+```
+
+Write a script that loops over each country in the gapminder dataset, tests whether the country starts with a ‘B’ , and print out whether the life expectancy is smaller than 50, between 50 and 70, or greater than 70.
+```{r}
+
+thresholdValue1 <- 50
+thresholdValue2 <- 70
+
+
+country_subset <-  df[grep("^B", df$country), ]
+for (i_country in unique(country_subset$country)){
+ country_subset_lifeExp <- mean(country_subset$lifeExp)
+  if(country_subset_lifeExp < thresholdValue1){
+    cat("Average Life Expectancy in", i_country, "is less than", thresholdValue1, "\n")
+  }
+  else if(thresholdValue1 < country_subset_lifeExp && country_subset_lifeExp < thresholdValue2){
+    cat("Average Life Expectancy in", i_country, "is between", thresholdValue1, "and", thresholdValue2, "\n")
+  } 
+  else {
+    cat("Average Life Expectancy in", i_country, "is above", thresholdValue2, "\n")
+  }
+  
+}
+
+
+```
+
+
+Optional: Write a script that loops over each country in the gapminder dataset, tests whether the country starts with a ‘M’ and graphs life expectancy against time (using plot() function) as a line graph if the mean life expectancy is under 50 years.
+Hint: If you are struggling with the gapminder tibble format, consider converting it into a dataframe (from tibble), either by downloading it from the internet and loading it via read.csv (not read_csv), and/or using as.data.frame() conversion function and then appropriately subsetting.

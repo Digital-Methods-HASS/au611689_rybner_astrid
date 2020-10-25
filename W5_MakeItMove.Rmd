@@ -56,6 +56,11 @@ Q2. What country is the richest in 1952 (far right on x axis)?
 
 gapminder %>% filter(year==1952) %>% arrange(desc(gdpPercap))
 
+
+#alternative solution with the order function
+subset(gapminder[order(-gapminder$gdpPercap),], year == 1952)
+
+
 ```
 #Answer Q2
 From the above code you can see, that the maximum gdp in 1952 was 108382.35 in the country Kuwait. 
@@ -74,7 +79,7 @@ Q3. Can you differentiate the continents by color and fix the axis labels?
 
 #Answer Q3
 You can differentiate between the continents by adding a color argument in the aestetics ie. color=continent.
-You add labels to the x- and y-axis with the labs function, in which you specify, what you want to call the x- and y-axis respectively. You can also specify the title of the legends in the labs() function. The size= argument names the size lab and the color= argument defines what the color lab is called. If you eg. had 'shape' as a  facet in your plot, you could say shape="title" to name that argument. 
+You add labels to the x- and y-axis with the labs function, in which you specify, what you want to call the x- and y-axis respectively. You can also specify the title of the legends in the labs() function. The size= argument names the size legend and the color= argument defines what the color legend is called. If you eg. had 'shape' as a  facet in your plot, you could say shape="title" to name that argument. 
 ```{r}
 
 ggplot(subset(gapminder, year == 2007), aes(gdpPercap, lifeExp, size = pop, color=continent)) + #color by continent
